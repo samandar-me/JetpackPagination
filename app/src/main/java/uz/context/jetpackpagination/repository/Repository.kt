@@ -1,16 +1,20 @@
 package uz.context.jetpackpagination.repository
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import uz.context.jetpackpagination.database.UnsplashDatabase
+import uz.context.jetpackpagination.model.Detail
 import uz.context.jetpackpagination.model.UnsplashImage
 import uz.context.jetpackpagination.paging.SearchPagingSource
 import uz.context.jetpackpagination.paging.UnsplashRemoteMediator
 import uz.context.jetpackpagination.remote.UnsplashApi
 import uz.context.jetpackpagination.util.Constants.ITEMS_PER_PAGE
+import uz.context.jetpackpagination.util.toDetail
 import javax.inject.Inject
 
 class Repository @Inject constructor(
@@ -38,5 +42,11 @@ class Repository @Inject constructor(
                 SearchPagingSource(unsplashApi = unsplashApi, query = query)
             }
         ).flow
+    }
+
+    suspend fun getImageById(id: String): Flow<Detail> {
+        return flow {
+            emit(unsplashApi.getPhotoById(id).toDetail())
+        }
     }
 }

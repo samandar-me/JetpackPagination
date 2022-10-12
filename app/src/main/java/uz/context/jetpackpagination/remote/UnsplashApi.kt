@@ -2,8 +2,10 @@ package uz.context.jetpackpagination.remote
 
 import retrofit2.http.GET
 import retrofit2.http.Headers
+import retrofit2.http.Path
 import retrofit2.http.Query
 import uz.context.jetpackpagination.BuildConfig
+import uz.context.jetpackpagination.model.DetailDTO
 import uz.context.jetpackpagination.model.SearchResult
 import uz.context.jetpackpagination.model.UnsplashImage
 
@@ -22,4 +24,10 @@ interface UnsplashApi {
         @Query("query") query: String,
         @Query("per_page") perPage: Int,
     ): SearchResult
+
+    @Headers("Authorization: Client-ID ${BuildConfig.API_KEY}")
+    @GET("/photos/{id}")
+    suspend fun getPhotoById(
+        @Path("id") id: String
+    ): DetailDTO
 }

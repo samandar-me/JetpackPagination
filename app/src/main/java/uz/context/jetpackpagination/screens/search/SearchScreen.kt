@@ -2,6 +2,7 @@ package uz.context.jetpackpagination.screens.search
 
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -25,7 +26,7 @@ fun SearchScreen(
             SearchWidget(
                 text = searchQuery,
                 onTextChange = {
-                               searchViewModel.updateSearchQuery(query = it)
+                    searchViewModel.updateSearchQuery(it)
                 },
                 onSearchClicked = {
                     searchViewModel.searchHeroes(query = it)
@@ -36,7 +37,7 @@ fun SearchScreen(
             )
         },
         content = {
-            ListContent(items = searchedImages)
+            ListContent(items = searchedImages, navController)
         }
     )
 }

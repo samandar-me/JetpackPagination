@@ -14,8 +14,9 @@ import uz.context.jetpackpagination.screens.commons.ListContent
 @ExperimentalPagingApi
 @Composable
 fun HomeScreen(navController: NavHostController, homeViewModel: HomeViewModel = hiltViewModel()) {
+
     val getAllImages = homeViewModel.getAllImages.collectAsLazyPagingItems()
-    
+
     Scaffold(
         topBar = {
             HomeTopBar(onSearchClicked = {
@@ -23,7 +24,7 @@ fun HomeScreen(navController: NavHostController, homeViewModel: HomeViewModel = 
             })
         },
         content = {
-            ListContent(items = getAllImages)
+            ListContent(items = getAllImages, navController)
         }
     )
 }

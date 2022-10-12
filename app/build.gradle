@@ -91,4 +91,7 @@ dependencies {
 
     // Coil
     implementation("io.coil-kt:coil-compose:1.3.2")
+
+    implementation "cafe.adriel.voyager:voyager-navigator:1.0.0-rc02"
+    implementation "cafe.adriel.voyager:voyager-koin:1.0.0-rc02"
 }
