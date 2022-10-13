@@ -13,9 +13,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -23,7 +24,6 @@ import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import uz.context.jetpackpagination.R
-import uz.context.jetpackpagination.ui.theme.Purple200
 import uz.context.jetpackpagination.ui.theme.Purple500
 import uz.context.jetpackpagination.util.Constants.TAG
 
@@ -44,9 +44,6 @@ fun DetailScreen(
         mutableStateOf(viewModel.state.value)
     }
     val detail = viewModel.state.value.detail
-    LaunchedEffect(key1 = Unit) {
-        Log.d(TAG, "DetailScreen: $detail")
-    }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -64,56 +61,90 @@ fun DetailScreen(
             }
         }
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            if(state.isLoading) {
+        if (state.isLoading) {
+            Column(
+                Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 CircularProgressIndicator()
             }
-            detail?.let {
-                val painter = rememberImagePainter(data = it.url) {
-                    crossfade(durationMillis = 1000)
-                    error(R.drawable.ic_placeholder)
-                    placeholder(R.drawable.ic_placeholder)
+        }
+        detail?.let {
+            Column(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                var likesCount by remember {
+                    mutableStateOf(detail.likes)
                 }
-                LaunchedEffect(key1 = Unit) {
-                    Log.d(TAG, "DetailScreen: $it")
-                }
-                Column(
+                Box(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        .fillMaxWidth()
+                        .weight(1.2f)
                 ) {
+                    val painter = rememberImagePainter(data = it.url) {
+                        crossfade(durationMillis = 1000)
+                        error(R.drawable.ic_placeholder)
+                        placeholder(R.drawable.ic_placeholder)
+                    }
                     Image(
                         painter = painter,
                         contentDescription = "",
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .size(250.dp)
+                            .fillMaxSize(),
+                        contentScale = ContentScale.Crop
                     )
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(15.dp),
-                        elevation = 4.dp,
-                        shape = RoundedCornerShape(12.dp),
+                }
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(5.dp)
+                        .weight(2f),
+                    elevation = 4.dp,
+                    shape = RoundedCornerShape(12.dp),
+                ) {
+                    Column(
+                        modifier = Modifier.padding(10.dp)
                     ) {
-                        Row(modifier = Modifier.fillMaxWidth()) {
+                        Row(modifier =  Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceEvenly) {
                             Text(
-                                modifier = Modifier.fillMaxWidth(),
+                                modifier = Modifier.fillMaxWidth().weight(3f),
                                 text = it.userName,
-                                color = Purple200,
-                                fontSize = 20.sp,
+                                color = Color(android.graphics.Color.parseColor(it.color)),
+                                fontSize = 22.sp,
                                 fontStyle = FontStyle.Italic
                             )
-                            IconButton(onClick = { isLiked = !isLiked }) {
-                                Icon(
-                                    imageVector = Icons.Default.Favorite,
-                                    contentDescription = "",
-                                    tint = if (isLiked) Color.Red else Color.Gray
-                                )
+                            IconButton(
+                                modifier = Modifier.fillMaxWidth().weight(1f),
+                                onClick = {
+                                isLiked = !isLiked
+                                if (isLiked) likesCount += 1
+                                else likesCount -= 1
+                            }) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Favorite,
+                                        contentDescription = "",
+                                        tint = if (isLiked) Color.Red else Color.Gray
+                                    )
+                                    Spacer(modifier = Modifier.width(3.dp))
+                                    Text(
+                                        text = likesCount.toString(),
+                                        fontSize = 12.sp,
+                                        fontStyle = FontStyle.Italic,
+                                        color = Color.Gray,
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
                             }
                         }
+                        Text(
+                            text = it.bio,
+                            fontSize = 14.sp,
+                            color = Color(android.graphics.Color.parseColor(it.color))
+                        )
                     }
                 }
             }

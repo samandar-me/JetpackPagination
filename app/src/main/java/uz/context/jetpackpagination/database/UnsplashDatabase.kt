@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import uz.context.jetpackpagination.model.UnsplashImage
 import uz.context.jetpackpagination.model.UnsplashRemoteKeys
 
-@Database(entities = [UnsplashImage::class, UnsplashRemoteKeys::class], version = 1)
+@Database(entities = [UnsplashImage::class, UnsplashRemoteKeys::class], version = 2)
 abstract class UnsplashDatabase : RoomDatabase() {
 
     abstract fun unsplashImageDao(): UnsplashImageDao

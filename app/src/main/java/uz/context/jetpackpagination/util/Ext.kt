@@ -8,6 +8,8 @@ fun DetailDTO.toDetail(): Detail {
         id = id,
         url = urls.regular,
         likes = likes,
-        userName = user.username
+        userName = user.username,
+        color = color,
+        bio = user.bio
     )
 }

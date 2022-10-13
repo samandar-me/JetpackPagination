@@ -7,6 +7,8 @@ import kotlinx.serialization.Serializable
 data class DetailDTO(
     @SerializedName("id")
     val id: String,
+    @SerializedName("color")
+    val color: String,
     @SerializedName("urls")
     val urls: Urls,
     @SerializedName("likes")

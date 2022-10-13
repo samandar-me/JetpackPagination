@@ -24,14 +24,23 @@ class DetailViewModel @Inject constructor(
 
     fun getImageById(id: String) {
         viewModelScope.launch {
-            delay(2000)
+            Log.d(TAG, "getImageById: $id viewmodel")
             repository.getImageById(id)
                 .onStart {
-                    _state.value = DetailState(isLoading = true)
+                    Log.d(TAG, "getImageById: onstart")
+                    _state.value = _state.value.copy(
+                        isLoading = true
+                    )
                 }.catch {
-                    _state.value = DetailState(isLoading = false, error = it.message.toString())
+                    _state.value = _state.value.copy(
+                        isLoading = false, error = it.message.toString()
+                    )
+                    Log.d(TAG, "getImageById: catch ${it.message}")
                 }.collect {
-                    _state.value = DetailState(detail = it, isLoading = false)
+                    _state.value = _state.value.copy(
+                        detail = it, isLoading = false, error = null
+                    )
+                    Log.d(TAG, "getImageById: $it collect")
                 }
         }
     }

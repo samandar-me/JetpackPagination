@@ -4,5 +4,7 @@ data class Detail(
     val id: String,
     val url: String,
     val likes: Int,
-    val userName: String
+    val color: String,
+    val userName: String,
+    val bio: String
 )

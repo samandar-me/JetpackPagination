@@ -71,7 +71,6 @@ fun UnsplashItem(unsplashImage: UnsplashImage, onItemClicked: (id: String) -> Un
         error(R.drawable.ic_placeholder)
         placeholder(R.drawable.ic_placeholder)
     }
-    val context = LocalContext.current
     Box(
         modifier = Modifier
             .clickable {
@@ -161,7 +160,7 @@ fun UnsplashImagePreview() {
             id = "1",
             urls = Urls(regular = ""),
             likes = 100,
-            user = User(username = "Samandar", userLinks = UserLinks(html = ""))
+            user = User(username = "Samandar", userLinks = UserLinks(html = ""), bio = "")
         ),
         onItemClicked = {}
     )
